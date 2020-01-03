@@ -4,16 +4,18 @@ import java.util.TimerTask;
 public class Monster {
 
     static class move extends TimerTask {  //for animal move
-        private double distance;
-        private JLabel player_1;
-        private JLabel animal;
+        double distance;
+        JLabel player_1;
+        JLabel animal;
+        JLabel cage;
 
         public void run(){
             // get data
             player_1 = PairingWithMonster.player_1;
             animal   = PairingWithMonster.animal;
+            cage     = PairingWithMonster.cage;
 
-            distance=Math.sqrt( Math.pow(player_1.getX()-animal.getX(),2) +  Math.pow(player_1.getY()-animal.getY(),2) );
+            distance=Math.sqrt(Math.pow(player_1.getX()-animal.getX(),2) +  Math.pow(player_1.getY()-animal.getY(),2));
 
             if(PairingWithMonster.found_cards ==16){
                 // all pairs are found
@@ -33,8 +35,8 @@ public class Monster {
                 PairingWithMonster.blood.setIcon(PairingWithMonster.loser);
             }
 
-            if(Math.sqrt(Math.pow(animal.getX()- PairingWithMonster.cage.getX(),2)+Math.pow(animal.getY()- PairingWithMonster.cage.getY(),2) )<30
-                    && PairingWithMonster.cage.getIcon()== PairingWithMonster.weapon ){ // hit monster
+            if(Math.sqrt(Math.pow(animal.getX() - cage.getX(), 2)+Math.pow(animal.getY() - cage.getY(), 2) ) < 30
+                    && cage.getIcon() == PairingWithMonster.weapon ){ // hit monster
                 try{
                     PairingWithMonster.animal.setIcon(PairingWithMonster.animal_catch);
                     PairingWithMonster.cage.setIcon(PairingWithMonster.transparent);
@@ -43,6 +45,6 @@ public class Monster {
                 catch(Exception w){}//catch
 
             }
-        }
-    }
+        } // run()
+    } // class move()
 }

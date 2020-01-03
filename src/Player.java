@@ -7,11 +7,11 @@ public class Player {
         //times member represent calling times.
         // private int times = 0;
 
-        private double distance;  //calculate distance
-        private double x_diff, y_diff;
+        double distance;  //calculate distance
+        double x_diff, y_diff;
 
-        private JLabel ball_1;
-        private JLabel player_1;
+        JLabel ball_1;
+        JLabel player_1;
 
         public void run() {
 
@@ -55,9 +55,13 @@ public class Player {
 
     // timer for player throwing weapon (ball), Press "Q"
     static class throwBall extends TimerTask{
-        private int time=30;
-        private double f_x= PairingWithMonster.f1_weapon_sin, f_y= PairingWithMonster.f1_weapon_cos;
+        int time=30;
+        double f_x, f_y;
+
         public void run(){
+
+            f_x= PairingWithMonster.f1_weapon_sin;
+            f_y= PairingWithMonster.f1_weapon_cos;
 
             if(time<0){
                 PairingWithMonster.Q_able=true; // enable weapon
@@ -77,7 +81,7 @@ public class Player {
 
     // player's teleport timer, Press "E"
     static class teleport extends TimerTask {
-        private int time=5; //use once per fi ve seconds
+        int time=5; //use once per fi ve seconds
 
         public void run(){
             time--;
@@ -90,9 +94,9 @@ public class Player {
 
     // player flip card, Press "E"
     static class flipCard extends TimerTask{
-        private int time=1; // disable one second
-        private int[] check;
-        private int[] hidden_cards_number;
+        int time=1; // disable one second
+        int[] check;
+        int[] hidden_cards_number;
 
         public void run(){
             // get data
