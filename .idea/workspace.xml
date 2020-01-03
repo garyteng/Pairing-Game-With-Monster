@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0c7bab62-38f4-4a57-9ce5-a3bc2d554ccd" name="Default Changelist" comment="" />
+    <list default="true" id="39214baa-96c3-49c8-94ad-067e324db0e1" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1VrYRDHQ48kxlHNx5uAW6R8lGpo" />
+  <component name="ProjectId" id="1VrmyNW06CmfcnPxYa5T475pyKo" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -23,14 +19,13 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.scopes" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunManager">
     <configuration name="PairingWithMonster" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PairingWithMonster" />
-      <module name="Pairing_With_Monster" />
+      <module name="Pairing-Game-With-Monster" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -58,41 +53,34 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0c7bab62-38f4-4a57-9ce5-a3bc2d554ccd" name="Default Changelist" comment="" />
-      <created>1578012670703</created>
+      <changelist id="39214baa-96c3-49c8-94ad-067e324db0e1" name="Default Changelist" comment="" />
+      <created>1578019841872</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1578012670703</updated>
+      <updated>1578019841872</updated>
     </task>
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="361" y="72" key="#Project_Structure" timestamp="1578012687988">
+    <state width="746" height="195" key="GridCell.Tab.0.bottom" timestamp="1578020427452">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="72" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1578012687987" />
-    <state width="1493" height="175" key="GridCell.Tab.0.bottom" timestamp="1578019114017">
+    <state width="746" height="195" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1578020427452" />
+    <state width="746" height="195" key="GridCell.Tab.0.center" timestamp="1578020427451">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="175" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1578019114017" />
-    <state width="1493" height="175" key="GridCell.Tab.0.center" timestamp="1578019114017">
+    <state width="746" height="195" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1578020427451" />
+    <state width="746" height="195" key="GridCell.Tab.0.left" timestamp="1578020427451">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="175" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1578019114017" />
-    <state width="1493" height="175" key="GridCell.Tab.0.left" timestamp="1578019114016">
+    <state width="746" height="195" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1578020427451" />
+    <state width="746" height="195" key="GridCell.Tab.0.right" timestamp="1578020427452">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="175" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1578019114016" />
-    <state width="1493" height="175" key="GridCell.Tab.0.right" timestamp="1578019114017">
+    <state width="746" height="195" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1578020427452" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1578020126583">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="175" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1578019114017" />
-    <state x="249" y="0" key="SettingsEditor" timestamp="1578016384705">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1578016384705" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/pairing_with_monster$PairingWithMonster.ic" NAME="PairingWithMonster Coverage Results" MODIFIED="1578014292790" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1578020126583" />
   </component>
 </project>

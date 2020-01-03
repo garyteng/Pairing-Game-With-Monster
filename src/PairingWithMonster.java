@@ -17,17 +17,17 @@ public class PairingWithMonster {
 
     static int[] array={0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7}; // Icon Image array
     static String[] array2={"0.JPG", "1.JPG", "2.JPG", "3.JPG", "4.JPG", "5.JPG", "6.JPG", "7.JPG", "8.JPG"};
-    static ImageIcon[] array3=new ImageIcon[16]; //儲存RANDOM後的排
+    static ImageIcon[] array3=new ImageIcon[16]; // shuffle result
 
     static ImageIcon question=new ImageIcon( PairingWithMonster.class.getResource("me2.png"));
-    static ImageIcon f1=new ImageIcon(PairingWithMonster.class.getResource("p1.png")); //人物1
+    static ImageIcon f1=new ImageIcon(PairingWithMonster.class.getResource("p1.png")); // player
     static ImageIcon f1_ball=new ImageIcon(PairingWithMonster.class.getResource("images.png"));  //Coin that player is chasing
     static ImageIcon transparent=new ImageIcon(PairingWithMonster.class.getResource("transparent.png"));
     static ImageIcon transparent2=new ImageIcon(PairingWithMonster.class.getResource("transparent2.png"));
     static ImageIcon animal_Icon=new ImageIcon(PairingWithMonster.class.getResource("monster.png"));
     static ImageIcon weapon=new ImageIcon(PairingWithMonster.class.getResource("catch_ball.png"));
     //static ImageIcon hand=new ImageIcon(PairingWithMonster.class.getResource("hand.png")); //Cursor
-    static ImageIcon finish=new ImageIcon(PairingWithMonster.class.getResource("finish.jpg")); //翻成功的圖
+    static ImageIcon finish=new ImageIcon(PairingWithMonster.class.getResource("finish.jpg"));
     static ImageIcon blood_Icon=new ImageIcon(PairingWithMonster.class.getResource("blood_color.png"));
     static ImageIcon animal_catch=new ImageIcon(PairingWithMonster.class.getResource("22.png"));
     static ImageIcon cry=new ImageIcon(PairingWithMonster.class.getResource("人物.png"));
@@ -109,7 +109,8 @@ public class PairingWithMonster {
         cage.setBounds(270,270,100,100);
         //cage.setOpaque(false);
 
-        pnl.setBounds(0,0,603,603);             /*pnl.setLocation(80,80);   pnl.setSize(640,640);*/
+        pnl.setBounds(0,0,603,603);
+        /*pnl.setLocation(80,80);   pnl.setSize(640,640);*/
 
         cp.add(pnl/*,BorderLayout.CENTER*/);
 
@@ -186,8 +187,6 @@ public class PairingWithMonster {
     static class KeyLis extends KeyAdapter{
         double key_sin=sin,key_cos=cos;
         int id;
-
-
 
         public void keyPressed(KeyEvent G){
             id=G.getKeyCode();
