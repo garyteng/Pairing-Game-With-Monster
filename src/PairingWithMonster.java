@@ -41,10 +41,9 @@ public class PairingWithMonster {
     static JPanel pnl=new JPanel(new GridLayout(4,4,1,1));
     static JPanel jd_pnl=new JPanel(new GridLayout(2,1) );
 
-    static JLabel lab[]=new JLabel[16]; //要翻得牌
+    static JLabel lab[]=new JLabel[16]; // cards
     static JLabel lab_1=new JLabel(f1); // player
     static JLabel ball_1=new JLabel(transparent); // player destination
-    //static JLabel animal=new JLabel(animal_Icon); //animal的顯示JLabel
     static JLabel cage =new JLabel(transparent2); // weapon for player 1
     static JLabel animal=new JLabel(animal_Icon); // monster
     static JLabel blood=new JLabel(blood_Icon);
@@ -66,7 +65,7 @@ public class PairingWithMonster {
                 System.getProperty("user.dir"));
 
         for(int i=0;i<100;i++){  // shuffle cards
-//            swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
+            // swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
             int aa=0, bb=0, cc=0;
             aa=(int)(Math.random()*16); bb=(int)(Math.random()*16);
             cc=array[aa];
@@ -92,7 +91,6 @@ public class PairingWithMonster {
         cp.add(blood);
         blood.setBounds(20,630,550,30);
 
-
         cp.add(animal);
         animal.setBounds(300,300,100,100);
         animal.setOpaque(false);
@@ -116,14 +114,13 @@ public class PairingWithMonster {
 
 
         for(int i=0;i<16;i++){  //add JLabel to JPanel
-            lab[i]=new JLabel();//初始化
+            lab[i]=new JLabel();
             lab[i].setIcon(question);
             lab[i].setBackground(Color.WHITE);
             lab[i].setVerticalTextPosition(JLabel.BOTTOM);
             lab[i].setHorizontalTextPosition(JLabel.CENTER);
             pnl.add(lab[i]);
         }
-
 
         frm.setSize(625,725);
         frm.setVisible(true);
@@ -155,30 +152,30 @@ public class PairingWithMonster {
 
     }
 
-    static class f1_flip extends TimerTask{ //f1翻牌用
-        private int time=1; //會有1秒鐘不能用
+    static class f1_flip extends TimerTask{ // player flip card
+        private int time=1; // disable one second
         public void run(){
             time--;
             if(time<=0){
 
-                if( array[check[0]] == array[check[1]] ){  //牌相同
+                if( array[check[0]] == array[check[1]] ){  // same card
                     lab[check[0]].setIcon(finish);
                     lab[check[1]].setIcon(finish);
 
                     if((poker+2)==16){
-                        blood.setBounds(3,603,600,75); //贏了(血條換)
+                        blood.setBounds(3,603,600,75); // reset bounds size
                         blood.setIcon(winner);
-                        lab_1.setIcon(f1);//人物便會原狀
-                        animal.setIcon(animal_Icon);//怪獸便會原狀
+                        lab_1.setIcon(f1); // reset player
+                        animal.setIcon(animal_Icon); // reset monster
                     }
                     poker+=2;
                 }
-                else{  //牌不同
+                else{  // different card
                     lab[check[0]].setIcon( question );
                     lab[check[1]].setIcon( question );
                 }
 
-                E_able=true; //E又可以用了;
+                E_able=true; // enable "E"
                 this.cancel(); }
         }
     }
@@ -191,22 +188,23 @@ public class PairingWithMonster {
         public void keyPressed(KeyEvent G){
             id=G.getKeyCode();
 
-            if(id==KeyEvent.VK_T){  // 直接關閉鍵
+            if(id==KeyEvent.VK_T){  // shut down program
                 frm.dispose();
                 System.exit(0);
             }
 
-            if(id==KeyEvent.VK_Q && Q_able){//按下Q時 (fi攻擊)
+            if(id==KeyEvent.VK_Q && Q_able){ // press "Q"
                 cage.setLocation(lab_1.getX(),lab_1.getY() );
                 cage.setIcon(weapon);
                 weapon_timer.schedule(new f1_weapon(),10,31 );//timer start
-                Q_able=false; //讓Q暫時不能用
+                Q_able=false; // disable "Q"
             }  //key Q end
 
-            if(id==KeyEvent.VK_W && W_able){//按下W時 (f1閃現)
+            if(id==KeyEvent.VK_W && W_able){// "W" is pressed, teleport
 
-                if(lab_1.getX()+150*(f1_weapon_cos)+50<=10 || lab_1.getX()+150*(f1_weapon_cos)+50>=590){//會出界
-                    for(int i=0;i<=150;i+=3){ //用FOR迴圈找到一個,適當的位址
+                if(lab_1.getX()+150*(f1_weapon_cos)+50<=10 || lab_1.getX()+150*(f1_weapon_cos)+50>=590){
+                    // Will go out of border
+                    for(int i=0;i<=150;i+=3){ // use for to find location within border
 
                         if( lab_1.getX()+i*(f1_weapon_cos)+50<=10 || lab_1.getX()+i*(f1_weapon_cos)+50>=590){
                             lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
@@ -215,9 +213,10 @@ public class PairingWithMonster {
                             lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
 
-                    }/*for*/ }
-                else if(lab_1.getY()+150*(f1_weapon_sin)+50<=10 || lab_1.getY()+150*(f1_weapon_sin)+50>=590){//會出界
-                    for(int i=0;i<=150;i+=3){ //用FOR迴圈找到一個,適當的位址
+                    } // for
+                }else if(lab_1.getY()+150*(f1_weapon_sin)+50<=10 || lab_1.getY()+150*(f1_weapon_sin)+50>=590){
+                    // Will go out of border
+                    for(int i=0;i<=150;i+=3){ // use for to find location within border
 
                         if(lab_1.getX()+i*(f1_weapon_cos)+50<=10 || lab_1.getX()+i*(f1_weapon_cos)+50>=590){
                             lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
@@ -226,46 +225,48 @@ public class PairingWithMonster {
                             lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
 
-                    }/*for*/  }
-                else{//不會超出邊界
-                    lab_1.setLocation( (int)(lab_1.getX()+150*cos),(int)(lab_1.getY()+150*sin)  );}
+                    } // for
+                }else{
+                    lab_1.setLocation( (int)(lab_1.getX()+150*cos),(int)(lab_1.getY()+150*sin)  );
+                }
 
                 ball_1.setLocation(lab_1.getX(),lab_1.getY() );
                 flash_timer.schedule(new f1_flash(),2,1000 ) ;
-                W_able=false; //讓W暫時不能用
+                W_able=false; // disable "W"
             }//key W end
+
             if(id==KeyEvent.VK_E && E_able){
 
-                int one=0;  //看是翻到哪一張牌
+                int one=0;  // Get flipped card
                 one=(int)( (lab_1.getY()+50)/150*4+(lab_1.getX()+50)/150 );
 
-                check[check_time]=one; //讀入
+                check[check_time]=one; // record
 
                 if(blood_number==0){}
-                else if(lab[one].getIcon()==finish ){}  //不能選
-                else if( check_time==0 ){   //翻第一張
+                else if(lab[one].getIcon()==finish ){}  // already found
+                else if( check_time==0 ){   // first one in pair
                     lab[one].setIcon(array3[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1  , lab_1.getY() ); //解決覆蓋問題
+                    lab_1.setLocation( lab_1.getX()+1  , lab_1.getY() ); // handle cover issue
 
                     check_time++;
                     check_time%=2;
                 }
-                else if( check_time==1 && check[0]==check[1]){}  //點同一張2下
-                else if( check[1]==17 ){  //剛開始
+                else if( check_time==1 && check[0]==check[1]){}  // click the same card
+                else if( check[1]==17 ){  // beginning
                     lab[one].setIcon(array3[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); //解決覆蓋問題
+                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); // handle cover issue
 
                     check_time++;
                     check_time%=2;
                 }
-                else if( check_time==1 ){  //點了2張牌
+                else if( check_time==1 ){  // second one in the pair
                     lab[one].setIcon(array3[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); //解決覆蓋問題
+                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); // handle cover issue
 
-                    E_able=false; //E不可以用了;
+                    E_able=false; // disable "E"
                     flip_timer.schedule(new f1_flip() ,500,700);
 
                     check_time++;
@@ -286,8 +287,6 @@ public class PairingWithMonster {
 
                 //ff.schedule(new f1timer(),0,30 );
                 //aa.schedule(new animal_move(),17,30 );
-
-
 
                 for(int i=0;i<100;i++){  // shuffle cards
                     //swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
@@ -323,11 +322,7 @@ public class PairingWithMonster {
 
     static class MouseLis extends MouseAdapter{
 
-//	private double xxx,yyy,zzz;
-
         public void mousePressed(MouseEvent e){
-
-
 
             ball_1.setLocation(e.getX()-50 ,e.getY()-48 );
             ball_1.setIcon(f1_ball);
@@ -341,25 +336,25 @@ public class PairingWithMonster {
                             Math.pow(ball_1.getY()-lab_1.getY(),2) );
 
         }
-
     }
-
 
     static class animal_move extends TimerTask{  //for animal move
         private double distance;
         public void run(){
             distance=Math.sqrt( Math.pow(lab_1.getX()-animal.getX(),2) +  Math.pow(lab_1.getY()-animal.getY(),2) );
 
-            if(poker==16){/* (牌已翻完) this.cancel();*/}
-
-            else if(distance>50){
+            if(poker==16){
+                // all pairs are found
+                // this.cancel();
+            }else if(distance>50){
                 animal.setLocation( (int)( (animal.getX())+(lab_1.getX()-animal.getX() )/distance*3.5 ) , (int)( (animal.getY())+(lab_1.getY()-animal.getY() )/distance*3.5 ) ); }
             else if(blood_number>=2) {blood_number-=2;
                 blood.setSize((int)blood_number ,30);}
 
             if(blood_number<=0){  // dead
                 /*this.cancel();*/
-                blood.setBounds(3,603,600,75);  blood.setIcon(loser);}
+                blood.setBounds(3,603,600,75);  blood.setIcon(loser);
+            }
 
             if(Math.sqrt(Math.pow(animal.getX()-cage.getX(),2)+Math.pow(animal.getY()-cage.getY(),2) )<30
                     && cage.getIcon()==weapon ){ // hit monster
@@ -371,9 +366,7 @@ public class PairingWithMonster {
                 catch(Exception w){}//catch
 
             }
-
         }
-
     }
 
     // timer for player teleport CD
