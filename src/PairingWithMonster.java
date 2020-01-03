@@ -15,7 +15,7 @@ public class PairingWithMonster {
     static Timer flash_timer=new Timer("flash");
     static Timer flip_timer=new Timer("flip");
 
-    static int[] array={0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7}; // Icon Image array
+    static int[] hidden_cards_number ={0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7}; // Icon Image array
     static String[] image_names ={"0.JPG", "1.JPG", "2.JPG", "3.JPG", "4.JPG", "5.JPG", "6.JPG", "7.JPG", "8.JPG"};
     static ImageIcon[] hidden_cards =new ImageIcon[16]; // shuffle result
 
@@ -35,7 +35,7 @@ public class PairingWithMonster {
     static ImageIcon loser=new ImageIcon(PairingWithMonster.class.getResource("gameover.png"));
 
     static int[] check={16,17};  // Record opened cards
-    static int check_time=0;     // first or second opened card
+    static int first_or_second =0;     // first or second opened card
     static int found_cards =0;
 
     static JPanel pnl=new JPanel(new GridLayout(4,4,1,1));
@@ -57,7 +57,7 @@ public class PairingWithMonster {
     static double blood_number=550;
 
     //Q: throw ball, W: teleport for a short distance, E: open a card
-    static boolean Q_able=true ,W_able=true ,E_able=true;
+    static volatile boolean Q_able=true ,W_able=true ,E_able=true;
 
     public static void main(String args[]){
 
@@ -68,12 +68,12 @@ public class PairingWithMonster {
             // swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
             int aa=0, bb=0, cc=0;
             aa=(int)(Math.random()*16); bb=(int)(Math.random()*16);
-            cc=array[aa];
-            array[aa]=array[bb];
-            array[bb]=cc;
+            cc= hidden_cards_number[aa];
+            hidden_cards_number[aa]= hidden_cards_number[bb];
+            hidden_cards_number[bb]=cc;
         }
         for(int i=0;i<16;i++){   // update shuffle cards
-            hidden_cards[i]=new ImageIcon(PairingWithMonster.class.getResource(image_names[array[i] ]));
+            hidden_cards[i]=new ImageIcon(PairingWithMonster.class.getResource(image_names[hidden_cards_number[i] ]));
         }
 
         cp.setLayout( null );
@@ -112,7 +112,6 @@ public class PairingWithMonster {
 
         cp.add(pnl/*,BorderLayout.CENTER*/);
 
-
         for(int i=0;i<16;i++){  //add JLabel to JPanel
             cards[i]=new JLabel();
             cards[i].setIcon(question);
@@ -124,15 +123,14 @@ public class PairingWithMonster {
 
         frm.setSize(625,725);
         frm.setVisible(true);
-        //frm.setResizable(false);
+        frm.setResizable(false);
 
-        Timer timer = new Timer("Move");  //f1 timer start
-        //f1timer t = new f1timer();
-        timer.schedule(new f1timer()/*t*/, 0, 30);
+        Timer timer = new Timer("Move");  // player timer start
+        timer.schedule(new Player.playerTimer(), 0, 30);
 
         Timer timer_a = new Timer("Animal");  //animal timer start
-        animal_move tt = new animal_move();
-        timer_a.schedule(tt, 17, 30);
+        // animal_move tt = new animal_move();
+        timer_a.schedule(new Monster.move(), 17, 30);
 
         jd.setLocation(650,150);
         jd.setSize(150,150);
@@ -152,35 +150,6 @@ public class PairingWithMonster {
 
     }
 
-    static class f1_flip extends TimerTask{ // player flip card
-        private int time=1; // disable one second
-        public void run(){
-            time--;
-            if(time<=0){
-
-                if( array[check[0]] == array[check[1]] ){  // same card
-                    cards[check[0]].setIcon(finish);
-                    cards[check[1]].setIcon(finish);
-
-                    if((found_cards +2)==16){
-                        blood.setBounds(3,603,600,75); // reset bounds size
-                        blood.setIcon(winner);
-                        player_1.setIcon(f1); // reset player
-                        animal.setIcon(animal_Icon); // reset monster
-                    }
-                    found_cards +=2;
-                }
-                else{  // different card
-                    cards[check[0]].setIcon( question );
-                    cards[check[1]].setIcon( question );
-                }
-
-                E_able=true; // enable "E"
-                this.cancel(); }
-        }
-    }
-
-
     static class KeyLis extends KeyAdapter{
         double key_sin=sin,key_cos=cos;
         int id;
@@ -196,7 +165,8 @@ public class PairingWithMonster {
             if(id==KeyEvent.VK_Q && Q_able){ // press "Q"
                 cage.setLocation(player_1.getX(), player_1.getY() );
                 cage.setIcon(weapon);
-                weapon_timer.schedule(new f1_weapon(),10,31 );//timer start
+                // weapon_timer.schedule(new f1_weapon(),10,31 );//timer start
+                weapon_timer.schedule(new Player.throwBall(),10,31 );//timer start
                 Q_able=false; // disable "Q"
             }  //key Q end
 
@@ -208,8 +178,8 @@ public class PairingWithMonster {
 
                         if( player_1.getX()+i*(f1_weapon_cos)+50<=10 || player_1.getX()+i*(f1_weapon_cos)+50>=590){
                             player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
-                            break;}
-                        else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
+                            break;
+                        }else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
                             player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
 
@@ -231,7 +201,7 @@ public class PairingWithMonster {
                 }
 
                 ball_1.setLocation(player_1.getX(), player_1.getY() );
-                flash_timer.schedule(new f1_flash(),2,1000 ) ;
+                flash_timer.schedule(new Player.teleport(),2,1000 ) ;
                 W_able=false; // disable "W"
             }//key W end
 
@@ -240,37 +210,37 @@ public class PairingWithMonster {
                 int one=0;  // Get flipped card
                 one=(int)( (player_1.getY()+50)/150*4+(player_1.getX()+50)/150 );
 
-                check[check_time]=one; // record
+                check[first_or_second]=one; // record
 
-                if(blood_number==0){}
-                else if(cards[one].getIcon()==finish ){}  // already found
-                else if( check_time==0 ){   // first one in pair
+                if(blood_number==0){ // already dead
+                }else if(cards[one].getIcon()==finish ){  // already found
+                }else if( first_or_second ==0 ){   // first one in pair
                     cards[one].setIcon(hidden_cards[one]);
 
                     player_1.setLocation( player_1.getX()+1  , player_1.getY() ); // handle cover issue
 
-                    check_time++;
-                    check_time%=2;
-                }
-                else if( check_time==1 && check[0]==check[1]){}  // click the same card
-                else if( check[1]==17 ){  // beginning
+                    first_or_second++;
+                    first_or_second %=2;
+
+                }else if( first_or_second ==1 && check[0]==check[1]){
+                    // click the same card => Do nothing
+                }else if( check[1]==17 ){  // beginning
                     cards[one].setIcon(hidden_cards[one]);
 
                     player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
 
-                    check_time++;
-                    check_time%=2;
-                }
-                else if( check_time==1 ){  // second one in the pair
+                    first_or_second++;
+                    first_or_second %=2;
+                }else if( first_or_second ==1 ){  // second one in the pair
                     cards[one].setIcon(hidden_cards[one]);
 
                     player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
 
                     E_able=false; // disable "E"
-                    flip_timer.schedule(new f1_flip() ,500,700);
+                    flip_timer.schedule(new Player.flipCard(),500,700);
 
-                    check_time++;
-                    check_time%=2;
+                    first_or_second++;
+                    first_or_second %=2;
                 }
 
             }//key E end
@@ -285,24 +255,23 @@ public class PairingWithMonster {
         public void mouseClicked(MouseEvent z){
             if(start==(JButton)z.getSource() ){
 
-                //ff.schedule(new f1timer(),0,30 );
-                //aa.schedule(new animal_move(),17,30 );
-
                 for(int i=0;i<100;i++){  // shuffle cards
                     //swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
                     int aa=0,bb=0,cc=0;
                     aa=(int)(Math.random()*16); bb=(int)(Math.random()*16);
-                    cc=array[aa];
-                    array[aa]=array[bb];
-                    array[bb]=cc;
+                    cc= hidden_cards_number[aa];
+                    hidden_cards_number[aa]= hidden_cards_number[bb];
+                    hidden_cards_number[bb]=cc;
                 }
+
                 for(int i=0;i<16;i++){   // update shuffle cards
-                    hidden_cards[i]=new ImageIcon(image_names[array[i] ]);
+                    hidden_cards[i]=new ImageIcon(image_names[hidden_cards_number[i] ]);
                     //lab[one].setIcon(array3[one]);
                 }
-                for(int i=0;i<16;i++){
-                    cards[i].setIcon(question);}
 
+                for(int i=0;i<16;i++){
+                    cards[i].setIcon(question);
+                }
 
                 player_1.setIcon(f1); //reset player
                 player_1.setLocation(70,70);   // reset player location
@@ -314,9 +283,9 @@ public class PairingWithMonster {
                 blood.setIcon(blood_Icon); //reset blood
 
                 found_cards =0; // reset number of finded pairs
+            }else{
+                System.exit(0);
             }
-            else{
-                System.exit(0);}
         }
     }
 
@@ -337,112 +306,6 @@ public class PairingWithMonster {
 
         }
     }
-
-    static class animal_move extends TimerTask{  //for animal move
-        private double distance;
-        public void run(){
-            distance=Math.sqrt( Math.pow(player_1.getX()-animal.getX(),2) +  Math.pow(player_1.getY()-animal.getY(),2) );
-
-            if(found_cards ==16){
-                // all pairs are found
-                // this.cancel();
-            }else if(distance>50){
-                animal.setLocation( (int)( (animal.getX())+(player_1.getX()-animal.getX() )/distance*3.5 ) , (int)( (animal.getY())+(player_1.getY()-animal.getY() )/distance*3.5 ) ); }
-            else if(blood_number>=2) {blood_number-=2;
-                blood.setSize((int)blood_number ,30);}
-
-            if(blood_number<=0){  // dead
-                /*this.cancel();*/
-                blood.setBounds(3,603,600,75);  blood.setIcon(loser);
-            }
-
-            if(Math.sqrt(Math.pow(animal.getX()-cage.getX(),2)+Math.pow(animal.getY()-cage.getY(),2) )<30
-                    && cage.getIcon()==weapon ){ // hit monster
-                try{
-                    animal.setIcon(animal_catch);
-                    cage.setIcon(transparent);
-                    Thread.sleep(3000);
-                    animal.setIcon(animal_Icon);}
-                catch(Exception w){}//catch
-
-            }
-        }
-    }
-
-    // timer for player teleport CD
-    static class f1_flash extends TimerTask{
-        private int time=5; //use once per five seconds
-        public void run(){
-            time--;
-            if(time<=0){
-                W_able=true; // enable to use teleport
-                this.cancel(); }
-        }
-    }
-
-    // timer for player throwing weapon (ball)
-    static class f1_weapon extends TimerTask{
-        private int time=30;
-        private double f_x=f1_weapon_sin,f_y=f1_weapon_cos;
-        public void run(){
-
-            if(time<0){
-                Q_able=true; // enable weapon
-                cage.setLocation(50,700);
-                cage.setIcon(transparent);
-                this.cancel();}
-            else if(cage.getY()>550){time--; }// out of boundary
-            else{  // keep going
-                time--;
-                cage.setLocation( (int)(cage.getX()+10*f_y) ,(int)(cage.getY()+10*f_x) );}
-
-        }
-    }
-
-    // timer for player
-    static class f1timer extends TimerTask {
-        //times member represent calling times.
-        // private int times = 0;
-
-        private double distance;  //calculate distance
-        private double x_x,y_y;
-
-        //public void setTime(int x){time=x;}
-
-
-        public void run() {
-
-            x_x=ball_1.getX()- player_1.getX(); // x-axis diff
-            y_y=ball_1.getY()- player_1.getY(); // y-axis diff
-
-            distance=Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+Math.pow(ball_1.getY()- player_1.getY(),2)) ; //calculate distance
-
-            sin=y_y/distance;  // get sin
-            cos=x_x/distance;  // get cos
-
-            if(found_cards ==16){ // end
-    		/*try{Thread.sleep(1800);}
-    	    catch(Exception e){}
-    	    System.exit(0);*/}
-            else if(blood_number==0){/* out of blood */}
-
-            else if(distance<=20){ball_1.setIcon(transparent);}
-            else {// going
-                x_x= player_1.getX()+5*cos;
-                y_y= player_1.getY()+5*sin;
-                player_1.setLocation( (int)x_x,(int)y_y );}
-
-            if(blood_number<=0){  //翹了
-
-                player_1.setIcon(cry);
-
-    	   /*try{Thread.sleep(2800);}
-    	   catch(Exception e){}
-
-    		System.exit(0);*/    }
-
-        }//run() end
-    }//f1timer end
 
 }//class PairingWithMonster end
 
