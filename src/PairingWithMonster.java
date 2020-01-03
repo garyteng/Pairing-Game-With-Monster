@@ -16,10 +16,10 @@ public class PairingWithMonster {
     static Timer flip_timer=new Timer("flip");
 
     static int[] array={0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7}; // Icon Image array
-    static String[] array2={"0.JPG", "1.JPG", "2.JPG", "3.JPG", "4.JPG", "5.JPG", "6.JPG", "7.JPG", "8.JPG"};
-    static ImageIcon[] array3=new ImageIcon[16]; // shuffle result
+    static String[] image_names ={"0.JPG", "1.JPG", "2.JPG", "3.JPG", "4.JPG", "5.JPG", "6.JPG", "7.JPG", "8.JPG"};
+    static ImageIcon[] hidden_cards =new ImageIcon[16]; // shuffle result
 
-    static ImageIcon question=new ImageIcon( PairingWithMonster.class.getResource("me2.png"));
+    static ImageIcon question=new ImageIcon( PairingWithMonster.class.getResource("question.png"));
     static ImageIcon f1=new ImageIcon(PairingWithMonster.class.getResource("p1.png")); // player
     static ImageIcon f1_ball=new ImageIcon(PairingWithMonster.class.getResource("images.png"));  //Coin that player is chasing
     static ImageIcon transparent=new ImageIcon(PairingWithMonster.class.getResource("transparent.png"));
@@ -29,20 +29,20 @@ public class PairingWithMonster {
     //static ImageIcon hand=new ImageIcon(PairingWithMonster.class.getResource("hand.png")); //Cursor
     static ImageIcon finish=new ImageIcon(PairingWithMonster.class.getResource("finish.jpg"));
     static ImageIcon blood_Icon=new ImageIcon(PairingWithMonster.class.getResource("blood_color.png"));
-    static ImageIcon animal_catch=new ImageIcon(PairingWithMonster.class.getResource("22.png"));
-    static ImageIcon cry=new ImageIcon(PairingWithMonster.class.getResource("人物.png"));
+    static ImageIcon animal_catch=new ImageIcon(PairingWithMonster.class.getResource("captured_monster.png"));
+    static ImageIcon cry=new ImageIcon(PairingWithMonster.class.getResource("f1_failed.png"));
     static ImageIcon winner=new ImageIcon(PairingWithMonster.class.getResource("WINNER.gif"));
     static ImageIcon loser=new ImageIcon(PairingWithMonster.class.getResource("gameover.png"));
 
     static int[] check={16,17};  // Record opened cards
     static int check_time=0;     // first or second opened card
-    static int poker=0;
+    static int found_cards =0;
 
     static JPanel pnl=new JPanel(new GridLayout(4,4,1,1));
     static JPanel jd_pnl=new JPanel(new GridLayout(2,1) );
 
-    static JLabel lab[]=new JLabel[16]; // cards
-    static JLabel lab_1=new JLabel(f1); // player
+    static JLabel cards[]=new JLabel[16]; // cards
+    static JLabel player_1 =new JLabel(f1); // player
     static JLabel ball_1=new JLabel(transparent); // player destination
     static JLabel cage =new JLabel(transparent2); // weapon for player 1
     static JLabel animal=new JLabel(animal_Icon); // monster
@@ -73,7 +73,7 @@ public class PairingWithMonster {
             array[bb]=cc;
         }
         for(int i=0;i<16;i++){   // update shuffle cards
-            array3[i]=new ImageIcon(PairingWithMonster.class.getResource(array2[array[i] ]));
+            hidden_cards[i]=new ImageIcon(PairingWithMonster.class.getResource(image_names[array[i] ]));
         }
 
         cp.setLayout( null );
@@ -95,9 +95,9 @@ public class PairingWithMonster {
         animal.setBounds(300,300,100,100);
         animal.setOpaque(false);
 
-        cp.add(lab_1); // player
-        lab_1.setBounds(70,70,100,100);
-        lab_1.setOpaque(false);
+        cp.add(player_1); // player
+        player_1.setBounds(70,70,100,100);
+        player_1.setOpaque(false);
 
         cp.add(ball_1); // player chasing target
         ball_1.setBounds(70,70,100,96);
@@ -114,12 +114,12 @@ public class PairingWithMonster {
 
 
         for(int i=0;i<16;i++){  //add JLabel to JPanel
-            lab[i]=new JLabel();
-            lab[i].setIcon(question);
-            lab[i].setBackground(Color.WHITE);
-            lab[i].setVerticalTextPosition(JLabel.BOTTOM);
-            lab[i].setHorizontalTextPosition(JLabel.CENTER);
-            pnl.add(lab[i]);
+            cards[i]=new JLabel();
+            cards[i].setIcon(question);
+            cards[i].setBackground(Color.WHITE);
+            cards[i].setVerticalTextPosition(JLabel.BOTTOM);
+            cards[i].setHorizontalTextPosition(JLabel.CENTER);
+            pnl.add(cards[i]);
         }
 
         frm.setSize(625,725);
@@ -159,20 +159,20 @@ public class PairingWithMonster {
             if(time<=0){
 
                 if( array[check[0]] == array[check[1]] ){  // same card
-                    lab[check[0]].setIcon(finish);
-                    lab[check[1]].setIcon(finish);
+                    cards[check[0]].setIcon(finish);
+                    cards[check[1]].setIcon(finish);
 
-                    if((poker+2)==16){
+                    if((found_cards +2)==16){
                         blood.setBounds(3,603,600,75); // reset bounds size
                         blood.setIcon(winner);
-                        lab_1.setIcon(f1); // reset player
+                        player_1.setIcon(f1); // reset player
                         animal.setIcon(animal_Icon); // reset monster
                     }
-                    poker+=2;
+                    found_cards +=2;
                 }
                 else{  // different card
-                    lab[check[0]].setIcon( question );
-                    lab[check[1]].setIcon( question );
+                    cards[check[0]].setIcon( question );
+                    cards[check[1]].setIcon( question );
                 }
 
                 E_able=true; // enable "E"
@@ -194,7 +194,7 @@ public class PairingWithMonster {
             }
 
             if(id==KeyEvent.VK_Q && Q_able){ // press "Q"
-                cage.setLocation(lab_1.getX(),lab_1.getY() );
+                cage.setLocation(player_1.getX(), player_1.getY() );
                 cage.setIcon(weapon);
                 weapon_timer.schedule(new f1_weapon(),10,31 );//timer start
                 Q_able=false; // disable "Q"
@@ -202,35 +202,35 @@ public class PairingWithMonster {
 
             if(id==KeyEvent.VK_W && W_able){// "W" is pressed, teleport
 
-                if(lab_1.getX()+150*(f1_weapon_cos)+50<=10 || lab_1.getX()+150*(f1_weapon_cos)+50>=590){
+                if(player_1.getX()+150*(f1_weapon_cos)+50<=10 || player_1.getX()+150*(f1_weapon_cos)+50>=590){
                     // Will go out of border
                     for(int i=0;i<=150;i+=3){ // use for to find location within border
 
-                        if( lab_1.getX()+i*(f1_weapon_cos)+50<=10 || lab_1.getX()+i*(f1_weapon_cos)+50>=590){
-                            lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
+                        if( player_1.getX()+i*(f1_weapon_cos)+50<=10 || player_1.getX()+i*(f1_weapon_cos)+50>=590){
+                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
-                        else if(lab_1.getY()+i*(f1_weapon_sin)+50<=10 || lab_1.getY()+i*(f1_weapon_sin)+50>=590){
-                            lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
+                        else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
+                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
 
                     } // for
-                }else if(lab_1.getY()+150*(f1_weapon_sin)+50<=10 || lab_1.getY()+150*(f1_weapon_sin)+50>=590){
+                }else if(player_1.getY()+150*(f1_weapon_sin)+50<=10 || player_1.getY()+150*(f1_weapon_sin)+50>=590){
                     // Will go out of border
                     for(int i=0;i<=150;i+=3){ // use for to find location within border
 
-                        if(lab_1.getX()+i*(f1_weapon_cos)+50<=10 || lab_1.getX()+i*(f1_weapon_cos)+50>=590){
-                            lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
+                        if(player_1.getX()+i*(f1_weapon_cos)+50<=10 || player_1.getX()+i*(f1_weapon_cos)+50>=590){
+                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
-                        else if(lab_1.getY()+i*(f1_weapon_sin)+50<=10 || lab_1.getY()+i*(f1_weapon_sin)+50>=590){
-                            lab_1.setLocation( (int)(lab_1.getX()+i*(f1_weapon_cos) ),(int)(lab_1.getY()+i*(f1_weapon_sin) ) );
+                        else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
+                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
                             break;}
 
                     } // for
                 }else{
-                    lab_1.setLocation( (int)(lab_1.getX()+150*cos),(int)(lab_1.getY()+150*sin)  );
+                    player_1.setLocation( (int)(player_1.getX()+150*cos),(int)(player_1.getY()+150*sin)  );
                 }
 
-                ball_1.setLocation(lab_1.getX(),lab_1.getY() );
+                ball_1.setLocation(player_1.getX(), player_1.getY() );
                 flash_timer.schedule(new f1_flash(),2,1000 ) ;
                 W_able=false; // disable "W"
             }//key W end
@@ -238,33 +238,33 @@ public class PairingWithMonster {
             if(id==KeyEvent.VK_E && E_able){
 
                 int one=0;  // Get flipped card
-                one=(int)( (lab_1.getY()+50)/150*4+(lab_1.getX()+50)/150 );
+                one=(int)( (player_1.getY()+50)/150*4+(player_1.getX()+50)/150 );
 
                 check[check_time]=one; // record
 
                 if(blood_number==0){}
-                else if(lab[one].getIcon()==finish ){}  // already found
+                else if(cards[one].getIcon()==finish ){}  // already found
                 else if( check_time==0 ){   // first one in pair
-                    lab[one].setIcon(array3[one]);
+                    cards[one].setIcon(hidden_cards[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1  , lab_1.getY() ); // handle cover issue
+                    player_1.setLocation( player_1.getX()+1  , player_1.getY() ); // handle cover issue
 
                     check_time++;
                     check_time%=2;
                 }
                 else if( check_time==1 && check[0]==check[1]){}  // click the same card
                 else if( check[1]==17 ){  // beginning
-                    lab[one].setIcon(array3[one]);
+                    cards[one].setIcon(hidden_cards[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); // handle cover issue
+                    player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
 
                     check_time++;
                     check_time%=2;
                 }
                 else if( check_time==1 ){  // second one in the pair
-                    lab[one].setIcon(array3[one]);
+                    cards[one].setIcon(hidden_cards[one]);
 
-                    lab_1.setLocation( lab_1.getX()+1 , lab_1.getY() ); // handle cover issue
+                    player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
 
                     E_able=false; // disable "E"
                     flip_timer.schedule(new f1_flip() ,500,700);
@@ -297,15 +297,15 @@ public class PairingWithMonster {
                     array[bb]=cc;
                 }
                 for(int i=0;i<16;i++){   // update shuffle cards
-                    array3[i]=new ImageIcon(array2[array[i] ]);
+                    hidden_cards[i]=new ImageIcon(image_names[array[i] ]);
                     //lab[one].setIcon(array3[one]);
                 }
                 for(int i=0;i<16;i++){
-                    lab[i].setIcon(question);}
+                    cards[i].setIcon(question);}
 
 
-                lab_1.setIcon(f1); //reset player
-                lab_1.setLocation(70,70);   // reset player location
+                player_1.setIcon(f1); //reset player
+                player_1.setLocation(70,70);   // reset player location
                 animal.setLocation(300,300);// reset monster location
                 ball_1.setLocation(70,70);  // reset coin location
 
@@ -313,7 +313,7 @@ public class PairingWithMonster {
                 blood_number=550; // refill blood
                 blood.setIcon(blood_Icon); //reset blood
 
-                poker=0; // reset number of finded pairs
+                found_cards =0; // reset number of finded pairs
             }
             else{
                 System.exit(0);}
@@ -327,13 +327,13 @@ public class PairingWithMonster {
             ball_1.setLocation(e.getX()-50 ,e.getY()-48 );
             ball_1.setIcon(f1_ball);
 
-            f1_weapon_cos=(ball_1.getX()-lab_1.getX())/
-                    Math.sqrt(Math.pow(ball_1.getX()-lab_1.getX(),2)+
-                            Math.pow(ball_1.getY()-lab_1.getY(),2) );
+            f1_weapon_cos=(ball_1.getX()- player_1.getX())/
+                    Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+
+                            Math.pow(ball_1.getY()- player_1.getY(),2) );
 
-            f1_weapon_sin=(ball_1.getY()-lab_1.getY())/
-                    Math.sqrt(Math.pow(ball_1.getX()-lab_1.getX(),2)+
-                            Math.pow(ball_1.getY()-lab_1.getY(),2) );
+            f1_weapon_sin=(ball_1.getY()- player_1.getY())/
+                    Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+
+                            Math.pow(ball_1.getY()- player_1.getY(),2) );
 
         }
     }
@@ -341,13 +341,13 @@ public class PairingWithMonster {
     static class animal_move extends TimerTask{  //for animal move
         private double distance;
         public void run(){
-            distance=Math.sqrt( Math.pow(lab_1.getX()-animal.getX(),2) +  Math.pow(lab_1.getY()-animal.getY(),2) );
+            distance=Math.sqrt( Math.pow(player_1.getX()-animal.getX(),2) +  Math.pow(player_1.getY()-animal.getY(),2) );
 
-            if(poker==16){
+            if(found_cards ==16){
                 // all pairs are found
                 // this.cancel();
             }else if(distance>50){
-                animal.setLocation( (int)( (animal.getX())+(lab_1.getX()-animal.getX() )/distance*3.5 ) , (int)( (animal.getY())+(lab_1.getY()-animal.getY() )/distance*3.5 ) ); }
+                animal.setLocation( (int)( (animal.getX())+(player_1.getX()-animal.getX() )/distance*3.5 ) , (int)( (animal.getY())+(player_1.getY()-animal.getY() )/distance*3.5 ) ); }
             else if(blood_number>=2) {blood_number-=2;
                 blood.setSize((int)blood_number ,30);}
 
@@ -412,15 +412,15 @@ public class PairingWithMonster {
 
         public void run() {
 
-            x_x=ball_1.getX()-lab_1.getX(); // x-axis diff
-            y_y=ball_1.getY()-lab_1.getY(); // y-axis diff
+            x_x=ball_1.getX()- player_1.getX(); // x-axis diff
+            y_y=ball_1.getY()- player_1.getY(); // y-axis diff
 
-            distance=Math.sqrt(Math.pow(ball_1.getX()-lab_1.getX(),2)+Math.pow(ball_1.getY()-lab_1.getY(),2)) ; //calculate distance
+            distance=Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+Math.pow(ball_1.getY()- player_1.getY(),2)) ; //calculate distance
 
             sin=y_y/distance;  // get sin
             cos=x_x/distance;  // get cos
 
-            if(poker==16){ // end
+            if(found_cards ==16){ // end
     		/*try{Thread.sleep(1800);}
     	    catch(Exception e){}
     	    System.exit(0);*/}
@@ -428,13 +428,13 @@ public class PairingWithMonster {
 
             else if(distance<=20){ball_1.setIcon(transparent);}
             else {// going
-                x_x=lab_1.getX()+5*cos;
-                y_y=lab_1.getY()+5*sin;
-                lab_1.setLocation( (int)x_x,(int)y_y );}
+                x_x= player_1.getX()+5*cos;
+                y_y= player_1.getY()+5*sin;
+                player_1.setLocation( (int)x_x,(int)y_y );}
 
             if(blood_number<=0){  //翹了
 
-                lab_1.setIcon(cry);
+                player_1.setIcon(cry);
 
     	   /*try{Thread.sleep(2800);}
     	   catch(Exception e){}
