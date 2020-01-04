@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Timer;      //timer
-import java.util.TimerTask;  //timer
+
 
 public class PairingWithMonster {
 
@@ -78,8 +78,10 @@ public class PairingWithMonster {
 
         cp.setLayout( null );
 
-        pnl.addMouseListener(new MouseLis() );
-        frm.addKeyListener(new KeyLis() );
+        // pnl.addMouseListener(new MouseLis() );
+        pnl.addMouseListener(new MyMouseEvents.MouseLis());
+        // frm.addKeyListener(new KeyLis() );
+        frm.addKeyListener(new MyKeyEvents.KeyLis());
 
         //  frm.setCursor(weapon);
         Toolkit toolkit = Toolkit.getDefaultToolkit();  //Cursor Change Start
@@ -140,172 +142,16 @@ public class PairingWithMonster {
         jd_pnl.add(end);
         //end.setLocation(30,100);
 
-        start.addMouseListener(new Mouse_start() );
-        end.addMouseListener(new Mouse_start() );
+        //start.addMouseListener(new Mouse_start() );
+        //end.addMouseListener(new Mouse_start() );
+        start.addMouseListener(new MyMouseEvents.Mouse_start());
+        end.addMouseListener(new MyMouseEvents.Mouse_start() );
 
         jd.getContentPane().add(jd_pnl);
         //jd.pack();   //縮成一長條
         jd.setVisible(true);
         //jd.show();
-
     }
 
-    static class KeyLis extends KeyAdapter{
-        double key_sin=sin,key_cos=cos;
-        int id;
-
-        public void keyPressed(KeyEvent G){
-            id=G.getKeyCode();
-
-            if(id==KeyEvent.VK_T){  // shut down program
-                frm.dispose();
-                System.exit(0);
-            }
-
-            if(id==KeyEvent.VK_Q && Q_able){ // press "Q"
-                cage.setLocation(player_1.getX(), player_1.getY() );
-                cage.setIcon(weapon);
-                // weapon_timer.schedule(new f1_weapon(),10,31 );//timer start
-                weapon_timer.schedule(new Player.throwBall(),10,31 );//timer start
-                Q_able=false; // disable "Q"
-            }  //key Q end
-
-            if(id==KeyEvent.VK_W && W_able){// "W" is pressed, teleport
-
-                if(player_1.getX()+150*(f1_weapon_cos)+50<=10 || player_1.getX()+150*(f1_weapon_cos)+50>=590){
-                    // Will go out of border
-                    for(int i=0;i<=150;i+=3){ // use for to find location within border
-
-                        if( player_1.getX()+i*(f1_weapon_cos)+50<=10 || player_1.getX()+i*(f1_weapon_cos)+50>=590){
-                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
-                            break;
-                        }else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
-                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
-                            break;}
-
-                    } // for
-                }else if(player_1.getY()+150*(f1_weapon_sin)+50<=10 || player_1.getY()+150*(f1_weapon_sin)+50>=590){
-                    // Will go out of border
-                    for(int i=0;i<=150;i+=3){ // use for to find location within border
-
-                        if(player_1.getX()+i*(f1_weapon_cos)+50<=10 || player_1.getX()+i*(f1_weapon_cos)+50>=590){
-                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
-                            break;}
-                        else if(player_1.getY()+i*(f1_weapon_sin)+50<=10 || player_1.getY()+i*(f1_weapon_sin)+50>=590){
-                            player_1.setLocation( (int)(player_1.getX()+i*(f1_weapon_cos) ),(int)(player_1.getY()+i*(f1_weapon_sin) ) );
-                            break;}
-
-                    } // for
-                }else{
-                    player_1.setLocation( (int)(player_1.getX()+150*cos),(int)(player_1.getY()+150*sin)  );
-                }
-
-                ball_1.setLocation(player_1.getX(), player_1.getY() );
-                flash_timer.schedule(new Player.teleport(),2,1000 ) ;
-                W_able=false; // disable "W"
-            }//key W end
-
-            if(id==KeyEvent.VK_E && E_able){
-
-                int one=0;  // Get flipped card
-                one=(int)( (player_1.getY()+50)/150*4+(player_1.getX()+50)/150 );
-
-                check[first_or_second]=one; // record
-
-                if(blood_number==0){ // already dead
-                }else if(cards[one].getIcon()==finish ){  // already found
-                }else if( first_or_second ==0 ){   // first one in pair
-                    cards[one].setIcon(hidden_cards[one]);
-
-                    player_1.setLocation( player_1.getX()+1  , player_1.getY() ); // handle cover issue
-
-                    first_or_second++;
-                    first_or_second %=2;
-
-                }else if( first_or_second ==1 && check[0]==check[1]){
-                    // click the same card => Do nothing
-                }else if( check[1]==17 ){  // beginning
-                    cards[one].setIcon(hidden_cards[one]);
-
-                    player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
-
-                    first_or_second++;
-                    first_or_second %=2;
-                }else if( first_or_second ==1 ){  // second one in the pair
-                    cards[one].setIcon(hidden_cards[one]);
-
-                    player_1.setLocation( player_1.getX()+1 , player_1.getY() ); // handle cover issue
-
-                    E_able=false; // disable "E"
-                    flip_timer.schedule(new Player.flipCard(),500,700);
-
-                    first_or_second++;
-                    first_or_second %=2;
-                }
-
-            }//key E end
-
-        }//LeyPressed
-    }//KeyLis
-
-    static class Mouse_start extends MouseAdapter{
-        //private Timer ff=new Timer("ff");
-        //private Timer aa=new Timer("aa");
-
-        public void mouseClicked(MouseEvent z){
-            if(start==(JButton)z.getSource() ){
-
-                for(int i=0;i<100;i++){  // shuffle cards
-                    //swap(array[(int)(Math.random()*16) ],array[(int)(Math.random()*16)] );
-                    int aa=0,bb=0,cc=0;
-                    aa=(int)(Math.random()*16); bb=(int)(Math.random()*16);
-                    cc= hidden_cards_number[aa];
-                    hidden_cards_number[aa]= hidden_cards_number[bb];
-                    hidden_cards_number[bb]=cc;
-                }
-
-                for(int i=0;i<16;i++){   // update shuffle cards
-                    hidden_cards[i]=new ImageIcon(image_names[hidden_cards_number[i] ]);
-                    //lab[one].setIcon(array3[one]);
-                }
-
-                for(int i=0;i<16;i++){
-                    cards[i].setIcon(question);
-                }
-
-                player_1.setIcon(f1); //reset player
-                player_1.setLocation(70,70);   // reset player location
-                animal.setLocation(300,300);// reset monster location
-                ball_1.setLocation(70,70);  // reset coin location
-
-                blood.setBounds(20,630,550,30); // reset remaining blood
-                blood_number=550; // refill blood
-                blood.setIcon(blood_Icon); //reset blood
-
-                found_cards =0; // reset number of finded pairs
-            }else{
-                System.exit(0);
-            }
-        }
-    }
-
-    static class MouseLis extends MouseAdapter{
-
-        public void mousePressed(MouseEvent e){
-
-            ball_1.setLocation(e.getX()-50 ,e.getY()-48 );
-            ball_1.setIcon(f1_ball);
-
-            f1_weapon_cos=(ball_1.getX()- player_1.getX())/
-                    Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+
-                            Math.pow(ball_1.getY()- player_1.getY(),2) );
-
-            f1_weapon_sin=(ball_1.getY()- player_1.getY())/
-                    Math.sqrt(Math.pow(ball_1.getX()- player_1.getX(),2)+
-                            Math.pow(ball_1.getY()- player_1.getY(),2) );
-
-        }
-    }
-
-}//class PairingWithMonster end
+}
 

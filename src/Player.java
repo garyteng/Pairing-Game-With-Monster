@@ -13,11 +13,13 @@ public class Player {
         JLabel ball_1;
         JLabel player_1;
 
-        public void run() {
-
+        public playerTimer(){
             // get data
             ball_1   = PairingWithMonster.ball_1;
             player_1 = PairingWithMonster.player_1;
+        }
+
+        public void run() {
 
             x_diff =ball_1.getX()- player_1.getX(); // x-axis diff
             y_diff =ball_1.getY()- player_1.getY(); // y-axis diff
@@ -34,16 +36,16 @@ public class Player {
             }else if(PairingWithMonster.blood_number==0){
                 /* out of blood */
             }else if(distance<=20){
-                PairingWithMonster.ball_1.setIcon(PairingWithMonster.transparent);
+                ball_1.setIcon(PairingWithMonster.transparent);
             }else {// going
-                x_diff = PairingWithMonster.player_1.getX()+5* PairingWithMonster.cos;
-                y_diff = PairingWithMonster.player_1.getY()+5* PairingWithMonster.sin;
-                PairingWithMonster.player_1.setLocation( (int) x_diff,(int) y_diff);
+                x_diff = player_1.getX()+5* PairingWithMonster.cos;
+                y_diff = player_1.getY()+5* PairingWithMonster.sin;
+                player_1.setLocation( (int) x_diff,(int) y_diff);
             }
 
             if(PairingWithMonster.blood_number<=0){  // already die
 
-                PairingWithMonster.player_1.setIcon(PairingWithMonster.cry);
+                player_1.setIcon(PairingWithMonster.cry);
 
     	        /*try{Thread.sleep(2800);}
     	        catch(Exception e){}
@@ -58,23 +60,31 @@ public class Player {
         int time=30;
         double f_x, f_y;
 
-        public void run(){
+        JLabel cage;
 
+        public throwBall(){
+
+            cage = PairingWithMonster.cage;
+
+            // record weapon angle value in that moment
             f_x= PairingWithMonster.f1_weapon_sin;
             f_y= PairingWithMonster.f1_weapon_cos;
+        }
+
+        public void run(){
 
             if(time<0){
                 PairingWithMonster.Q_able=true; // enable weapon
-                PairingWithMonster.cage.setLocation(50,700);
-                PairingWithMonster.cage.setIcon(PairingWithMonster.transparent);
+                cage.setLocation(50,700);
+                cage.setIcon(PairingWithMonster.transparent);
                 this.cancel();
-            }else if(PairingWithMonster.cage.getY()>550){ // out of boundary
+            }else if(cage.getY()>550){ // out of boundary
                 time--;
             }else{  // keep going
                 time--;
-                PairingWithMonster.cage.setLocation(
-                        (int)(PairingWithMonster.cage.getX()+10*f_y) ,
-                        (int)(PairingWithMonster.cage.getY()+10*f_x) );
+                cage.setLocation(
+                        (int)(cage.getX()+10*f_y) ,
+                        (int)(cage.getY()+10*f_x) );
             } // if
         }
     }
@@ -97,18 +107,23 @@ public class Player {
         int time=1; // disable one second
         int[] check;
         int[] hidden_cards_number;
+        JLabel cards[];
 
-        public void run(){
+        public flipCard(){
             // get data
+            cards = PairingWithMonster.cards;
             check = PairingWithMonster.check; // flipped cards
             hidden_cards_number = PairingWithMonster.hidden_cards_number;
+        }
+
+        public void run(){
 
             time--;
             if(time<=0){
 
                 if( hidden_cards_number[check[0]] == hidden_cards_number[check[1]] ){  // same card
-                    PairingWithMonster.cards[check[0]].setIcon(PairingWithMonster.finish);
-                    PairingWithMonster.cards[check[1]].setIcon(PairingWithMonster.finish);
+                    cards[check[0]].setIcon(PairingWithMonster.finish);
+                    cards[check[1]].setIcon(PairingWithMonster.finish);
 
                     if((PairingWithMonster.found_cards +2)==16){
                         PairingWithMonster.blood.setBounds(3,603,600,75); // reset bounds size
@@ -120,8 +135,8 @@ public class Player {
                     PairingWithMonster.found_cards +=2;
 
                 }else{  // different card
-                    PairingWithMonster.cards[check[0]].setIcon( PairingWithMonster.question );
-                    PairingWithMonster.cards[check[1]].setIcon( PairingWithMonster.question );
+                    cards[check[0]].setIcon( PairingWithMonster.question );
+                    cards[check[1]].setIcon( PairingWithMonster.question );
                 }
 
                 PairingWithMonster.E_able=true; // enable "E"

@@ -15,3 +15,5 @@ To make pairing Game more fun, I add a monster to chase player.
 * Press "W" to teleport for a short distance
 * Press "E" to flip the card
 
+## Game Scene
+<img src="https://github.com/garyteng/Pairing-Game-With-Monster/blob/master/images/scene_1.png" width="500">

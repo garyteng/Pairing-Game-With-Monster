@@ -8,12 +8,17 @@ public class Monster {
         JLabel player_1;
         JLabel animal;
         JLabel cage;
+        JLabel blood;
 
-        public void run(){
+        public move(){
             // get data
             player_1 = PairingWithMonster.player_1;
             animal   = PairingWithMonster.animal;
             cage     = PairingWithMonster.cage;
+            blood    = PairingWithMonster.blood;
+        }
+
+        public void run(){
 
             distance=Math.sqrt(Math.pow(player_1.getX()-animal.getX(),2) +  Math.pow(player_1.getY()-animal.getY(),2));
 
@@ -26,22 +31,22 @@ public class Monster {
                         (int)( (animal.getY())+(player_1.getY()-animal.getY() )/distance*3.5 ) );
             }else if(PairingWithMonster.blood_number>=2) {
                 PairingWithMonster.blood_number-=2;
-                PairingWithMonster.blood.setSize((int) PairingWithMonster.blood_number ,30);
+                blood.setSize((int) PairingWithMonster.blood_number ,30);
             }
 
             if(PairingWithMonster.blood_number<=0){  // dead
                 /*this.cancel();*/
-                PairingWithMonster.blood.setBounds(3,603,600,75);
-                PairingWithMonster.blood.setIcon(PairingWithMonster.loser);
+                blood.setBounds(3,603,600,75);
+                blood.setIcon(PairingWithMonster.loser);
             }
 
             if(Math.sqrt(Math.pow(animal.getX() - cage.getX(), 2)+Math.pow(animal.getY() - cage.getY(), 2) ) < 30
                     && cage.getIcon() == PairingWithMonster.weapon ){ // hit monster
                 try{
-                    PairingWithMonster.animal.setIcon(PairingWithMonster.animal_catch);
-                    PairingWithMonster.cage.setIcon(PairingWithMonster.transparent);
+                    animal.setIcon(PairingWithMonster.animal_catch);
+                    cage.setIcon(PairingWithMonster.transparent);
                     Thread.sleep(3000);
-                    PairingWithMonster.animal.setIcon(PairingWithMonster.animal_Icon);}
+                    animal.setIcon(PairingWithMonster.animal_Icon);}
                 catch(Exception w){}//catch
 
             }
